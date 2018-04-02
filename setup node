@@ -1,0 +1,11 @@
+SLES_REG_CODE=
+SES_REG_CODE=
+ADMIN_NODE=
+
+SUSEConnect -r $SLES_REG_CODE	
+SUSEConnect -p ses/5/x86_64 -r $SES_REG_CODE
+zypper ref && zypper up -y && zypper in -y salt-minion
+echo "master: $ADMIN_NODE" >> /etc/salt/minion
+systemctl enable salt-minion
+systemctl restart salt-minion
+scp sesadmin@$ADMIN_NODE:/etc/hosts /etc/hosts
