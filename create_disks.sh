@@ -9,8 +9,8 @@ do
 		DISKNAME=$NODENAME-disk$DISK
 		echo "Creating disk $DISKNAME"
 		az vm disk attach --vm-name $NODENAME \
+		--resource-group $RESOURCE_GROUP \
 		--disk $DISKNAME --new --size-gb 1023 --sku Standard_LRS
-
 	done
 done
 
