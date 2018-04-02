@@ -5,6 +5,7 @@ Requires a file names variables.sh with the following content:
 ```
 #/bin/sh
 
+export RESOURCE_GROUP=
 export AVAILABILITY_SET=
 export USERNAME=
 export PASSWORD=

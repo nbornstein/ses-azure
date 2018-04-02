@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # SET UP VARIABLES
-./variables.sh
+. ./variables.sh
 
 # CREATE TEST NODES
 
