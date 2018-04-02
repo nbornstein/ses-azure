@@ -49,7 +49,7 @@ do
 	--admin-username $USERNAME \
 	--admin-password $PASSWORD \
 	--authentication-type password \
-	--size Standard_D8s_v3 \
+	--size Standard_DS5_v2 \
 	--image SUSE:SLES-BYOS:12-SP3:2018.01.04 \
 	--nics $NODENAME-nic \
 	-l $LOCATION
