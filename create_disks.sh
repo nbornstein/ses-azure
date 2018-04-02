@@ -1,16 +1,19 @@
 #!/bin/bash
 
-for NODE in {6..8}
+# SET UP VARIABLES
+. ./variables.sh
+
+for NODE in {1..5}
 do
 	NODENAME=ses-poc-osd$NODE
 
-	for DISK in {7..10}
+	for DISK in {1..10}
 	do
 		DISKNAME=$NODENAME-disk$DISK
 		echo "Creating disk $DISKNAME"
 		az vm disk attach --vm-name $NODENAME \
 		--resource-group $RESOURCE_GROUP \
-		--disk $DISKNAME --new --size-gb 1023 --sku Standard_LRS
+		--disk $DISKNAME --new --size-gb 4096 --sku Standard_LRS
 	done
 done
 

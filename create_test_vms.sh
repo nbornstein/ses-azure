@@ -11,6 +11,7 @@ do
 
 	echo "Creating VM $NODENAME"
 	az vm create --name $NODENAME \
+	--resource-group $RESOURCE_GROUP \
 	--admin-username $USERNAME \
 	--admin-password $PASSWORD \
 	--authentication-type password \
