@@ -3,9 +3,11 @@
 # SET UP VARIABLES
 . ./variables.sh
 
+NUM_TEST=$1
+
 # CREATE TEST NODES
 
-for NODE in {1..2}
+for NODE in {1..$NUM_TEST}
 do
 	NODENAME=ses-poc-test$NODE
 

@@ -4,7 +4,7 @@ Scripts to build and manage a SUSE Enterprise Storage cluster on Azure
 ## How to Use the Scripts
 These are bash scripts, so obviously they need Linux or a bash shell on whatever platform you're using. The script names should be self-explanatory. They also require the Azure CLI to be installed, and a file named `variables.sh` in the same directory. 
 
-## Specific Scripts
+### Specific Scripts
 Name | Notes
 ---- | -----
 `build_node.sh` | This is just a copy of https://github.com/dmbyte/SES-scripts/blob/master/clusterbuilder/buildit.sh.

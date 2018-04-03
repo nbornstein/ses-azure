@@ -3,17 +3,20 @@
 # SET UP VARIABLES
 . ./variables.sh
 
+NUM_OSD=$1
+NUM_TEST=$2
+
 # CREATE ADMIN NODE
 
 NODENAME=ses-poc-admin
 
 echo "Creating NIC for $NODENAME"
-az network public-ip create 
+az network public-ip create \
 --resource-group $RESOURCE_GROUP \
 --allocation-method Dynamic \
 --dns-name $NODENAME-public-ip
 
-az network nic create 
+az network nic create \
 --resource-group $RESOURCE_GROUP \
 --vnet-name $VNET \
 --subnet $SUBNET \
@@ -24,7 +27,7 @@ az network nic create
 
 # CREATE TEST NODES
 
-for NODE in {1..2}
+for NODE in {1..$NUM_TEST}
 do
 	NODENAME=ses-poc-test$NODE
 
@@ -33,7 +36,7 @@ do
     --allocation-method Dynamic \
     --dns-name $NODENAME-public-ip
 
-    az network nic create 
+    az network nic create \
     --resource-group $RESOURCE_GROUP \
     --vnet-name $VNET \
     --subnet $SUBNET \
@@ -46,7 +49,7 @@ done
 
 # CREATE OSD NODES
 
-for NODE in {1..5}
+for NODE in {1..$NUM_OSD}
 do
 	NODENAME=ses-poc-osd$NODE
 

@@ -3,6 +3,9 @@
 # SET UP VARIABLES
 . ./variables.sh
 
+NUM_OSD=$1
+NUM_TEST=$2
+
 # CREATE ADMIN NODE
 
 NODENAME=ses-poc-admin
@@ -21,7 +24,7 @@ az vm create \
 
 # CREATE TEST NODES
 
-for NODE in {1..2}
+for NODE in {1..$NUM_TEST}
 do
 	NODENAME=ses-poc-test$NODE
 
@@ -39,7 +42,7 @@ done
 
 # CREATE OSD NODES
 
-for NODE in {1..5}
+for NODE in {1..$NUM_OSD}
 do
 	NODENAME=ses-poc-osd$NODE
 

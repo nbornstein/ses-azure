@@ -3,7 +3,9 @@
 # SET UP VARIABLES
 . ./variables.sh
 
-for NODE in {1..5}
+NUM_OSD=$1
+
+for NODE in {1..$NUM_OSD}
 do
 	NODENAME=ses-poc-osd$NODE
 	echo "Resizing $NODENAME"
