@@ -7,7 +7,7 @@ NUM_TEST=$1
 
 # CREATE TEST NODES
 
-for NODE in {1..$NUM_TEST}
+for NODE in {1..2}
 do
 	NODENAME=ses-poc-test$NODE
 

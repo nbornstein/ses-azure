@@ -5,7 +5,7 @@
 
 NUM_OSD=$1
 
-for NODE in {1..$NUM_OSD}
+for NODE in {1..10}
 do
 	NODENAME=ses-poc-osd$NODE
 	echo "Resizing $NODENAME"
