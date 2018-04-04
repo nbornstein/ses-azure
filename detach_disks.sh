@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # SET UP VARIABLES
-. ./variable.sh
+. ./variables.sh
 
 NUM_OSD=$1
 NUM_DISK=$2
