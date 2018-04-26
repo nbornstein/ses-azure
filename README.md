@@ -13,6 +13,7 @@ Name | Notes
 `create_nics.sh` | Create vNICs with accelerated networking for admin, test, and OSD VMs. You need to specify how many of each VM type.
 `create_test_vms.sh` | Create VMs to be used as test clients for the cluster. You need to specify how many VMs to create.
 `create_vms.sh` | Create admin, test, and OSD VMs. You need to specify how many of each VM type to create.
+`delete_disks.sh` | Delete all disks in the specified resource group.
 `delete_vms.sh` | Delete all VMs in the specified resource group.
 `detach_disks.sh` | Detach disks from all the OSD nodes. You need to specify how many OSD nodes and how disks per node.
 `reattach_disks.sh` | Attach existing disks to all the OSD nodes. You need to specify how many OSD nodes and how disks per node.
