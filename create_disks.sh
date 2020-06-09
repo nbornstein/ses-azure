@@ -5,18 +5,19 @@
 
 NUM_OSD=$1
 NUM_DISK=$2
+PREFIX=$3
 
-for NODE in {1..5}
+for NODE in $(seq 1 $NUM_OSD) 
 do
-	NODENAME=ses-poc-osd$NODE
+	NODENAME=kennametal-osd$NODE
 
-	for DISK in {1..10}
+	for DISK in $(seq 1 $NUM_DISK)
 	do
 		DISKNAME=$NODENAME-disk$DISK
 		echo "Creating disk $DISKNAME"
 		az vm disk attach --vm-name $NODENAME \
 		--resource-group $RESOURCE_GROUP \
-		--disk $DISKNAME --new --size-gb 4096 --sku Standard_LRS
+		--name $DISKNAME --new --size-gb 4096 --sku Standard_LRS
 	done
 done
 

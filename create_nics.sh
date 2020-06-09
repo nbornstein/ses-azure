@@ -5,10 +5,28 @@
 
 NUM_OSD=$1
 NUM_TEST=$2
+PREFIX=$3
+
+# CREATE VNET
+
+echo "Creating vnet for $PREFIX"
+az network vnet create \
+--address-prefixes 10.0.0.0/24 \
+--name $VNET \
+--resource-group $RESOURCE_GROUP
+
+# CREATE SUBNET
+
+echo "Creating subnet for $PREFIX"
+az network vnet subnet create \
+--address-prefixes 10.0.0.0/24 \
+--name $SUBNET \
+--resource-group $RESOURCE_GROUP \
+--vnet-name $VNET
 
 # CREATE ADMIN NODE
 
-NODENAME=ses-poc-admin
+NODENAME=$PREFIX-admin
 
 echo "Creating NIC for $NODENAME"
 az network public-ip create \
@@ -28,9 +46,9 @@ az network nic create \
 
 # CREATE TEST NODES
 
-for NODE in {1..2}
+for NODE in $(seq 1 $NUM_TEST) 
 do
-	NODENAME=ses-poc-test$NODE
+	NODENAME=$PREFIX-test$NODE
 
     az network public-ip create \
     --name $NODENAME-public-ip \
@@ -51,9 +69,9 @@ done
 
 # CREATE OSD NODES
 
-for NODE in {1..5}
+for NODE in $(seq 1 $NUM_OSD) 
 do
-	NODENAME=ses-poc-osd$NODE
+	NODENAME=$PREFIX-osd$NODE
 
     az network public-ip create \
     --name $NODENAME-public-ip \

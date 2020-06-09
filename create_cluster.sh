@@ -4,6 +4,9 @@
 NUM_OSD=5
 NUM_TEST=2
 NUM_DISK=10
+NONET=0
+NOVM=0
+NODISK=0
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -26,8 +29,25 @@ do
         shift # past argument
         shift # past value
         ;;
+        -p|--prefix)
+        PREFIX="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --nonet)
+        NONET=1
+        shift # past argument
+        ;;
+        --novm)
+        NOVM=1
+        shift # past argument
+        ;;
+        --nodisk)
+        NODISK=1
+        shift # past argument
+        ;;
         -h|--help)
-        echo "Usage: $0 [-o|--osd] [-t|--test] [-d|--disk] [-h|--help]"
+        echo "Usage: $0 [-o|--osd] [-t|--test] [-d|--disk] [p|--prefix] [--nonet] [--novm] [--nodisk] [-h|--help]"
         exit 0
         ;;
         *)    # unknown option
@@ -38,8 +58,8 @@ do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-./create_nics.sh $NUM_OSD $NUM_TEST
+[ "$NONET" -eq "0" ] && ./create_nics.sh $NUM_OSD $NUM_TEST $PREFIX
 
-./create_vms.sh $NUM_OSD $NUM_TEST
+[ "$NOVM" -eq "0" ] && ./create_vms.sh $NUM_OSD $NUM_TEST $PREFIX
 
-./create_disks.sh $NUM_OSD $NUM_DISK
+[ "$NODISK" -eq "0" ] && ./create_disks.sh $NUM_OSD $NUM_DISK $PREFIX
