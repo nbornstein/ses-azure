@@ -9,7 +9,7 @@ PREFIX=$3
 
 for NODE in $(seq 1 $NUM_OSD) 
 do
-	NODENAME=kennametal-osd$NODE
+	NODENAME=$PREFIX-osd$NODE
 
 	for DISK in $(seq 1 $NUM_DISK)
 	do
