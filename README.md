@@ -28,10 +28,10 @@ Name | Notes
 #/bin/sh
 
 # Resource group for the cluster
-export RESOURCE_GROUP= 
+export RESOURCE_GROUP=$PREFIX-resource-group
 
 # Availability set for the cluster
-export AVAILABILITY_SET=
+export AVAILABILITY_SET=$PREFIX-availability-set
 
 # Username to log in to the nodes
 export USERNAME=
@@ -42,14 +42,17 @@ export PASSWORD=
 # TODO: Use SSH key to log in
 
 # Network security group to use for all nodes
-export NSG=
+export NSG=$PREFIX-nsg
 
 # Location for the nodes
 export LOCATION=
 
 # Name of VNet
-export VNET=
+export VNET=$PREFIX-vnet
 
 # Name of Subnet
-export SUBNET=
+export SUBNET=$PREFIX-subnet
+
+# URN of Image
+export IMAGE=
 ```
