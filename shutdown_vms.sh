@@ -11,7 +11,7 @@ echo $IDS
 while true; do
     read -p "Do you wish to proceed? " yn
     case $yn in
-        [Yy]* ) az vm deallocate --ids {$IDS} --no-wait; break;;
+        [Yy]* ) az vm deallocate --ids $IDS --no-wait; break;;
         [Nn]* ) exit;;
         * ) echo "Please answer yes or no.";;
     esac
