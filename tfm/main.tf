@@ -56,8 +56,8 @@ resource "azurerm_public_ip" "publicip-osd4" {
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
 }
-resource "azurerm_public_ip" "publicip-test1" {
-  name                = "${var.prefix}-test1-ip"
+resource "azurerm_public_ip" "publicip-test" {
+  name                = "${var.prefix}-test-ip"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -170,22 +170,22 @@ resource "azurerm_network_interface" "nic-osd4" {
     public_ip_address_id          = azurerm_public_ip.publicip-osd4.id
   }
 }
-resource "azurerm_network_interface" "nic-test1" {
-  name                      = "${var.prefix}-test1-nic"
+resource "azurerm_network_interface" "nic-test" {
+  name                      = "${var.prefix}-test-nic"
   location                  = var.location
   resource_group_name       = azurerm_resource_group.rg.name
   network_security_group_id = azurerm_network_security_group.nsg.id
 
   ip_configuration {
-    name                          = "${var.prefix}-test1-ip"
+    name                          = "${var.prefix}-test-ip"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip-test1.id
+    public_ip_address_id          = azurerm_public_ip.publicip-test.id
   }
 }
 
 # Create the admin virtual machine
-resource "azurerm_virtual_machine" "vm" {
+resource "azurerm_virtual_machine" "vm-admin" {
   name                  = "${var.prefix}-admin"
   location              = var.location
   resource_group_name   = azurerm_resource_group.rg.name
@@ -200,10 +200,10 @@ resource "azurerm_virtual_machine" "vm" {
   }
 
   storage_image_reference {
-    publisher = "SUSE"
-    offer     = "sles-15-sp1-byos"
-    sku       = "gen1"
-    version   = "latest"
+    publisher = var.publisher
+    offer     = var.offer
+    sku       = var.sku
+    version   = var.image_version
   }
 
   os_profile {
@@ -229,6 +229,54 @@ resource "azurerm_virtual_machine" "vm" {
       "sudo SUSEConnect -p ses/6/x86_64 -r ${var.ses_reg_code}",
       "sudo zypper ref && sudo zypper up -y && sudo zypper in -y salt-master",
       "sudo systemctl enable salt-master",
+      "sudo reboot"
+    ]
+  }
+}
+
+# Create the test virtual machine
+resource "azurerm_virtual_machine" "vm-test" {
+  name                  = "${var.prefix}-test"
+  location              = var.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  network_interface_ids = [azurerm_network_interface.nic-test.id]
+  vm_size               = var.test_vm_size
+
+  storage_os_disk {
+    name              = "${var.prefix}-test-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  storage_image_reference {
+    publisher = var.publisher
+    offer     = var.offer
+    sku       = var.sku
+    version   = var.image_version
+  }
+
+  os_profile {
+    computer_name  = "${var.prefix}-test"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      host     = azurerm_public_ip.publicip-test.ip_address
+      user     = var.admin_username
+      password = var.admin_password
+    }
+
+    inline = [
+      "sudo SUSEConnect -r ${var.sles_reg_code}",
+      "sudo zypper ref && sudo zypper up -y && sudo zypper in -y ceph-common",
       "sudo reboot"
     ]
   }
