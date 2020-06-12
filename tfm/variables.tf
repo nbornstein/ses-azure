@@ -75,3 +75,8 @@ variable "num_disk" {
     type = number
     default = 4
 }
+
+variable "disk_size_gb" {
+    type = number
+    default = 4000
+}

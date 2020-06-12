@@ -242,7 +242,7 @@ resource "azurerm_managed_disk" "disk-osd" {
   resource_group_name  = azurerm_resource_group.rg.name
   storage_account_type = "Premium_LRS"
   create_option        = "Empty"
-  disk_size_gb         = "4000"
+  disk_size_gb         = var.disk_size_gb
 }
 
 # Create the OSD storage node virtual machines
