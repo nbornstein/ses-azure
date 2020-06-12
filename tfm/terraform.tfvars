@@ -1,0 +1,5 @@
+prefix = "kennametal"
+admin_username = "sesadmin"
+admin_password = "SUSEstorage1234!"
+sles_reg_code = "INTERNAL-USE-ONLY-1b0b38391973789e"
+ses_reg_code = "INTERNAL-USE-ONLY-25b32f2519a2acab"
