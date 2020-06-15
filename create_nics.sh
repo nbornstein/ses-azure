@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# SET UP VARIABLES
-. ./variables.sh
-
 NUM_OSD=$1
 NUM_TEST=$2
 PREFIX=$3
+
+# SET UP VARIABLES
+. ./variables.sh
 
 # CREATE VNET
 
@@ -46,9 +46,9 @@ az network nic create \
 
 # CREATE TEST NODES
 
-for NODE in $(seq 1 $NUM_TEST) 
+for NODE in $( seq 0 $(($NUM_TEST - 1)) ) 
 do
-	NODENAME=$PREFIX-test$NODE
+	NODENAME=$PREFIX-test-$NODE
 
     az network public-ip create \
     --name $NODENAME-public-ip \
@@ -69,7 +69,7 @@ done
 
 # CREATE OSD NODES
 
-for NODE in $(seq 1 $NUM_OSD) 
+for NODE in $( seq 0 $(($NUM_OSD - 1)) ) 
 do
 	NODENAME=$PREFIX-osd$NODE
 

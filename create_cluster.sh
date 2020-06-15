@@ -4,6 +4,7 @@
 NUM_OSD=5
 NUM_TEST=2
 NUM_DISK=10
+NORG=0
 NONET=0
 NOVM=0
 NODISK=0
@@ -34,6 +35,10 @@ do
         shift # past argument
         shift # past value
         ;;
+        --norg)
+        NORG=1
+        shift # past argument
+        ;;
         --nonet)
         NONET=1
         shift # past argument
@@ -57,6 +62,8 @@ do
     esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
+
+[ "$NORG" -eq "0" ] && ./create_rg.sh $PREFIX
 
 [ "$NONET" -eq "0" ] && ./create_nics.sh $NUM_OSD $NUM_TEST $PREFIX
 

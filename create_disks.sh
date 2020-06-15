@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# SET UP VARIABLES
-. ./variables.sh
-
 NUM_OSD=$1
 NUM_DISK=$2
 PREFIX=$3
 
-for NODE in $(seq 1 $NUM_OSD) 
-do
-	NODENAME=$PREFIX-osd$NODE
+# SET UP VARIABLES
+. ./variables.sh
 
-	for DISK in $(seq 1 $NUM_DISK)
+for NODE in $( seq 0 $(($NUM_OSD - 1)) ) 
+do
+	NODENAME=$PREFIX-osd-$NODE
+
+	for DISK in $( seq 0 $(($NUM_DISK - 1)) )
 	do
-		DISKNAME=$NODENAME-disk$DISK
+		DISKNAME=$NODENAME-disk-$DISK
 		echo "Creating disk $DISKNAME"
 		az vm disk attach --vm-name $NODENAME \
 		--resource-group $RESOURCE_GROUP \
