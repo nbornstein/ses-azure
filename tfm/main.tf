@@ -143,7 +143,7 @@ resource "azurerm_virtual_machine" "vm-admin" {
   vm_size               = var.admin_vm_size
 
   storage_os_disk {
-    name              = "${var.prefix}-admin-osdisk"
+    name              = "${var.prefix}-admin-disk-os"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -179,8 +179,7 @@ resource "azurerm_virtual_machine" "vm-admin" {
       "sudo SUSEConnect -p ses/6/x86_64 -r ${var.ses_reg_code}",
       "sudo zypper ref && sudo zypper up -y && sudo zypper in -y salt-master",
       "sudo echo \"master: ${var.prefix}-admin\" >> /etc/salt/minion",
-      "sudo systemctl enable salt-master",
-      "sudo reboot"
+      "sudo systemctl enable salt-master"
     ]
   }
 }
@@ -195,7 +194,7 @@ resource "azurerm_virtual_machine" "vm-test" {
   vm_size               = var.test_vm_size
 
   storage_os_disk {
-    name              = "${var.prefix}-test-${count.index}-osdisk"
+    name              = "${var.prefix}-test-${count.index}-disk-os"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -228,21 +227,9 @@ resource "azurerm_virtual_machine" "vm-test" {
 
     inline = [
       "sudo SUSEConnect -r ${var.sles_reg_code}",
-      "sudo zypper ref && sudo zypper up -y && sudo zypper in -y ceph-common",
-      "sudo reboot"
+      "sudo zypper ref && sudo zypper up -y && sudo zypper in -y ceph-common"
     ]
   }
-}
-
-# Create the OSD storage disks
-resource "azurerm_managed_disk" "disk-osd" {
-  count                = var.num_osd * var.num_disk
-  name                 = "${var.prefix}-osd-${floor(count.index / var.num_disk)}-disk-${floor(count.index % var.num_disk)}"
-  location             = var.location
-  resource_group_name  = azurerm_resource_group.rg.name
-  storage_account_type = "Premium_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = var.disk_size_gb
 }
 
 # Create the OSD storage node virtual machines
@@ -255,7 +242,7 @@ resource "azurerm_virtual_machine" "vm-osd" {
   vm_size               = var.osd_vm_size
 
   storage_os_disk {
-    name              = "${var.prefix}-osd-${count.index}-osdisk"
+    name              = "${var.prefix}-osd-${count.index}-disk-os"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -290,13 +277,23 @@ resource "azurerm_virtual_machine" "vm-osd" {
       "sudo SUSEConnect -r ${var.sles_reg_code}",
       "sudo zypper ref && sudo zypper up -y && sudo zypper in -y salt-minion",
       "sudo echo \"master: ${var.prefix}-admin\" >> /etc/salt/minion",
-      "sudo systemctl enable salt-minion",
-      "sudo reboot"
+      "sudo systemctl enable salt-minion"
     ]
   }
 }
 
-# Attach the OSD disk to the OSD VM
+# Create the OSD disks
+resource "azurerm_managed_disk" "disk-osd" {
+  count                = var.num_osd * var.num_disk
+  name                 = "${var.prefix}-osd-${floor(count.index / var.num_disk)}-disk-${floor(count.index % var.num_disk)}"
+  location             = var.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = var.disk_size_gb
+}
+
+# Attach the OSD disks to the OSD VMs
 resource "azurerm_virtual_machine_data_disk_attachment" "datadisk" {
   count              = var.num_osd * var.num_disk
   managed_disk_id    = azurerm_managed_disk.disk-osd[floor(count.index % var.num_disk)].id
