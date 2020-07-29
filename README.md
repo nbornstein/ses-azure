@@ -56,3 +56,15 @@ export SUBNET=$PREFIX-subnet
 # URN of Image
 export IMAGE=
 ```
+
+## Notes on accessing Ceph Dashboard 
+
+The OSD nodes are built without public internet IP addresses, so they will need to be accessed via port routing on the admin node.
+Using SSH, you can use a command like this:
+
+  sh -L 8443:<prefix>-osd-<n>:8443 -L 3000:<prefix>-admin:3000 sesadmin@<prefix>-admin-public-ip.eastus.cloudapp.azure.com
+
+And then hit https://localhost:8443/ to access the dashboard. You will also need an entry in your /etc/hosts file to map the 
+admin node's public IP address to the internal name of the admin host, like so:
+  
+  <ip address>	<prefix>-admin.internal.cloudapp.net
